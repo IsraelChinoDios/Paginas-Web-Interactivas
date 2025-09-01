@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aula virtual JS</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons (opcional) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --brand:#2563eb;
+      --bg-grad: linear-gradient(135deg, rgba(37,99,235,.10), rgba(124,58,237,.10));
+    }
+    body { background: var(--bg-grad); }
+    .hero {
+      background:
+        radial-gradient(1200px 500px at 10% -10%, rgba(37,99,235,.15), transparent),
+        radial-gradient(800px 400px at 100% 0, rgba(124,58,237,.18), transparent),
+        #fff;
+      border-bottom: 1px solid rgba(0,0,0,.06);
+    }
+    .badge-points {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.08);
+      padding: .35rem .6rem;
+      border-radius: 999px;
+      font-weight: 600;
+      display: inline-flex; gap:.4rem; align-items:center;
+    }
+    .card-func { border: 1px solid rgba(0,0,0,.06); }
+    .out {
+      min-height: 2.2rem;
+      background: #f8fafc;
+      border: 1px dashed rgba(0,0,0,.12);
+      border-radius: .5rem;
+      padding: .5rem .75rem;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Encabezado -->
+  <header class="hero py-4">
+    <div class="container">
+      <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+        <div>
+          <h1 class="h3 mb-1">Aula virtual JS</h1>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="badge-points">
+            <i class="bi bi-stars"></i>
+            <span>Puntos:</span>
+            <span id="points">0</span>
+          </div>
+          <button id="reset-btn" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-counterclockwise me-1"></i>Reiniciar
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-3">
+        <label class="form-label mb-1">Progreso</label>
+        <div class="progress" role="progressbar" aria-label="Progreso" aria-valuemin="0" aria-valuemax="100">
+          <div id="progress-bar" class="progress-bar bg-primary" style="width: 0%">0%</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido -->
+  <main class="container my-4">
+    <div class="row g-3">
+      <!-- 1 Suma -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card card-func h-100">
+          <div class="card-body">
+            <h2 class="h6">1) Suma (a + b)</h2>
+            <div class="row g-2">
+              <div class="col"><input id="suma-a" class="form-control" type="number" step="any" value="5" placeholder="a"></div>
+              <div class="col"><input id="suma-b" class="form-control" type="number" step="any" value="7" placeholder="b"></div>
+            </div>
+            <button id="suma-btn" class="btn btn-primary btn-sm mt-2">Calcular</button>
+            <div id="suma-out" class="out mt-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 Resta -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card card-func h-100">
+          <div class="card-body">
+            <h2 class="h6">2) Resta (a − b)</h2>
+            <div class="row g-2">
+              <div class="col"><input id="resta-a" class="form-control" type="number" step="any" value="10" placeholder="a"></div>
+              <div class="col"><input id="resta-b" class="form-control" type="number" step="any" value="3" placeholder="b"></div>
+            </div>
+            <button id="resta-btn" class="btn btn-primary btn-sm mt-2">Calcular</button>
+            <div id="resta-out" class="out mt-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 Es par -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card card-func h-100">
+          <div class="card-body">
+            <h2 class="h6">3) ¿Es par?</h2>
+            <input id="espar-n" class="form-control" type="number" step="any" value="42" placeholder="n">
+            <button id="espar-btn" class="btn btn-primary btn-sm mt-2">Verificar</button>
+            <div id="espar-out" class="out mt-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Factorial -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card card-func h-100">
+          <div class="card-body">
+            <h2 class="h6">4) Factorial (n!)</h2>
+            <input id="fact-n" class="form-control" type="number" step="1" min="0" value="5" placeholder="n">
+            <button id="fact-btn" class="btn btn-primary btn-sm mt-2">Calcular</button>
+            <div id="fact-out" class="out mt-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 Invertir texto -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card card-func h-100">
+          <div class="card-body">
+            <h2 class="h6">5) Invertir texto</h2>
+            <input id="inv-txt" class="form-control" type="text" value="hola mundo" placeholder="Texto">
+            <button id="inv-btn" class="btn btn-primary btn-sm mt-2">Invertir</button>
+            <div id="inv-out" class="out mt-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 Multiplicar -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card card-func h-100">
+          <div class="card-body">
+            <h2 class="h6">6) Multiplicación (a × b)</h2>
+            <div class="row g-2">
+              <div class="col"><input id="mul-a" class="form-control" type="number" step="any" value="4" placeholder="a"></div>
+              <div class="col"><input id="mul-b" class="form-control" type="number" step="any" value="10" placeholder="b"></div>
+            </div>
+            <button id="mul-btn" class="btn btn-primary btn-sm mt-2">Calcular</button>
+            <div id="mul-out" class="out mt-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 Máximo -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card card-func h-100">
+          <div class="card-body">
+            <h2 class="h6">7) Máximo en una lista</h2>
+            <input id="max-list" class="form-control" type="text" value="3, 10, -2, 7, 21" placeholder="Números separados por coma">
+            <button id="max-btn" class="btn btn-primary btn-sm mt-2">Calcular</button>
+            <div id="max-out" class="out mt-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 Promedio -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card card-func h-100">
+          <div class="card-body">
+            <h2 class="h6">8) Promedio de una lista</h2>
+            <input id="avg-list" class="form-control" type="text" value="8, 9, 10, 7" placeholder="Números separados por coma">
+            <button id="avg-btn" class="btn btn-primary btn-sm mt-2">Calcular</button>
+            <div id="avg-out" class="out mt-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9 Aleatorio -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card card-func h-100">
+          <div class="card-body">
+            <h2 class="h6">9) Entero aleatorio [min, max]</h2>
+            <div class="row g-2">
+              <div class="col"><input id="rnd-min" class="form-control" type="number" step="any" value="1" placeholder="min"></div>
+              <div class="col"><input id="rnd-max" class="form-control" type="number" step="any" value="6" placeholder="max"></div>
+            </div>
+            <button id="rnd-btn" class="btn btn-primary btn-sm mt-2">Generar</button>
+            <div id="rnd-out" class="out mt-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10 División -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card card-func h-100">
+          <div class="card-body">
+            <div class="d-flex align-items-center justify-content-between">
+              <h2 class="h6 mb-0">10) División (a ÷ b)</h2>
+              <span class="text-muted small">Evita b = 0</span>
+            </div>
+            <div class="row g-2 mt-1">
+              <div class="col"><input id="div-a" class="form-control" type="number" step="any" value="10" placeholder="a"></div>
+              <div class="col"><input id="div-b" class="form-control" type="number" step="any" value="2" placeholder="b"></div>
+            </div>
+            <button id="div-btn" class="btn btn-primary btn-sm mt-2">Calcular</button>
+            <div id="div-out" class="out mt-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal de instrucciones (inicio) -->
+  <div class="modal fade" id="introModal" tabindex="-1" aria-labelledby="introTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <h1 class="modal-title fs-5" id="introTitle">Instrucciones</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <ul class="mb-0">
+            <li>Usa cada tarjeta para probar una función</li>
+            <li>Usa cada función hasta completar las 10.</li>
+            <li>La barra muestra tu progreso de funciones usadas.</li>
+            <li>Al completar las 10, verás un mensaje de victoria. Presiona Reiniciar para empezar de nuevo.</li>
+          </ul>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">¡Entendido!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de victoria -->
+  <div class="modal fade" id="winModal" tabindex="-1" aria-labelledby="winTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <h1 class="modal-title fs-5" id="winTitle">🎉 ¡Lo lograste!</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          Has usado las 10 funciones. Puntuación total: <strong id="finalPoints">0</strong> puntos.
+          <div class="mt-2 text-secondary small">
+            Pulsa <strong>Reiniciar</strong> para comenzar de nuevo.
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS (bundle) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- App -->
+  <script src="app.js"></script>
+</body>
+</html>
