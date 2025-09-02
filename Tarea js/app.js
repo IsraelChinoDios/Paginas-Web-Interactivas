@@ -1,32 +1,29 @@
-// LÓGICA DE JUEGO
+// ======= LÓGICA DE JUEGO =======
 const TOTAL_FUNCS = 10;
 const used = new Set();
 let points = 0;
-let gameOver = false;
+let gameOver = false; // congela el puntaje al ganar
 
 function updateUI() {
   // Puntos
-  document.getElementById('points').textContent = points;
+  $('#points').text(points);
 
   // Progreso
   const pct = Math.round((used.size / TOTAL_FUNCS) * 100);
-  const bar = document.getElementById('progress-bar');
-  bar.style.width = pct + '%';
-  bar.setAttribute('aria-valuenow', String(pct));
-  bar.textContent = pct + '%';
+  const $bar = $('#progress-bar');
+  $bar.css('width', pct + '%').attr('aria-valuenow', String(pct)).text(pct + '%');
 
-  // Completado
+  // Completado (mostrar modal una sola vez y congelar)
   if (used.size === TOTAL_FUNCS && !gameOver) {
     gameOver = true;
-    document.getElementById('finalPoints').textContent = points;
-    const modal = new bootstrap.Modal(document.getElementById('winModal'));
+    $('#finalPoints').text(points);
+    const modal = new bootstrap.Modal($('#winModal')[0]);
     modal.show();
   }
 }
 
 function award(functionKey, success = true) {
   if (!success || gameOver) return; // si falló o ya terminó, no sumar
-
   if (!used.has(functionKey)) {
     used.add(functionKey);
     points += 10; // primer uso de esa función
@@ -39,49 +36,31 @@ function resetGame() {
   points = 0;
   gameOver = false;
   updateUI();
-
-  // Limpiar
-  document.querySelectorAll('.out').forEach(el => el.textContent = '');
+  // Limpiar salidas
+  $('.out').text('');
 }
 
-document.getElementById('reset-btn').addEventListener('click', resetGame);
-
-// FUNCIONES BÁSICA
-function suma(a, b) 
-    { return Number(a) + Number(b); }
-
-function resta(a, b) 
-    { return Number(a) - Number(b); }
-
+// ======= FUNCIONES BÁSICAS =======
+function suma(a, b) { return Number(a) + Number(b); }
+function resta(a, b) { return Number(a) - Number(b); }
 function esPar(n) {
   n = Number(n);
   return Number.isFinite(n) && n % 2 === 0;
 }
-
 function factorial(n) {
   n = Number(n);
   if (!Number.isInteger(n) || n < 0) throw new Error("n debe ser un entero ≥ 0");
   let r = 1; for (let i = 2; i <= n; i++) r *= i; return r;
 }
-
-function invertirTexto(str) 
-    { return String(str).split("").reverse().join(""); }
-
-function multiplicar(a, b) 
-    { return Number(a) * Number(b); }
-
-function maximo(listaNums) 
-    { return listaNums.length ? Math.max(...listaNums) : null; }
-
-function promedio(listaNums) 
-    { if(!listaNums.length) return null; const s=listaNums.reduce((a,n)=>a+n,0); return s/listaNums.length; }
-
+function invertirTexto(str) { return String(str).split("").reverse().join(""); }
+function multiplicar(a, b) { return Number(a) * Number(b); }
+function maximo(listaNums) { return listaNums.length ? Math.max(...listaNums) : null; }
+function promedio(listaNums) { if(!listaNums.length) return null; const s=listaNums.reduce((a,n)=>a+n,0); return s/listaNums.length; }
 function randomEntero(min,max){
   min=Math.ceil(Number(min)); max=Math.floor(Number(max));
   if(!Number.isFinite(min)||!Number.isFinite(max)||min>max) throw new Error("Rango inválido");
   return Math.floor(Math.random()*(max-min+1))+min;
 }
-
 function dividir(a,b){
   const x=Number(a), y=Number(b);
   if(!Number.isFinite(x)||!Number.isFinite(y)) throw new Error("Entrada inválida");
@@ -89,6 +68,7 @@ function dividir(a,b){
   return x/y;
 }
 
+// ======= UTILIDADES =======
 function parseListaNumeros(cadena){
   return String(cadena)
     .split(/[,\s]+/)
@@ -98,43 +78,44 @@ function parseListaNumeros(cadena){
     .filter(n=>Number.isFinite(n));
 }
 function setOut(id, value){
-  document.getElementById(id).textContent = String(value);
+  $('#' + id).text(String(value));
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+// ======= WIRING (jQuery) =======
+$(function() {
   // Mostrar instrucciones al inicio
-  const introEl = document.getElementById('introModal');
-  if (introEl) {
-    const intro = new bootstrap.Modal(introEl);
-    intro.show();
-  }
+  const introEl = $('#introModal')[0];
+  if (introEl) new bootstrap.Modal(introEl).show();
+
+  // Botón Reiniciar
+  $('#reset-btn').on('click', resetGame);
 
   // 1) Suma
-  document.getElementById('suma-btn').addEventListener('click', () => {
-    const a = document.getElementById('suma-a').value;
-    const b = document.getElementById('suma-b').value;
+  $('#suma-btn').on('click', () => {
+    const a = $('#suma-a').val();
+    const b = $('#suma-b').val();
     setOut('suma-out', suma(a,b));
     award('suma');
   });
 
   // 2) Resta
-  document.getElementById('resta-btn').addEventListener('click', () => {
-    const a = document.getElementById('resta-a').value;
-    const b = document.getElementById('resta-b').value;
+  $('#resta-btn').on('click', () => {
+    const a = $('#resta-a').val();
+    const b = $('#resta-b').val();
     setOut('resta-out', resta(a,b));
     award('resta');
   });
 
   // 3) Es par
-  document.getElementById('espar-btn').addEventListener('click', () => {
-    const n = document.getElementById('espar-n').value;
-    setOut('espar-out', esPar(n) ? 'Sí, es par' : 'No, es impar');
+  $('#espar-btn').on('click', () => {
+    const n = $('#espar-n').val();
+    setOut('espar-out', esPar(n) ? 'Sí, es par ✅' : 'No, es impar ❌');
     award('espar');
   });
 
   // 4) Factorial
-  document.getElementById('fact-btn').addEventListener('click', () => {
-    const n = document.getElementById('fact-n').value;
+  $('#fact-btn').on('click', () => {
+    const n = $('#fact-n').val();
     try {
       const r = factorial(n);
       setOut('fact-out', r);
@@ -146,40 +127,40 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   // 5) Invertir texto
-  document.getElementById('inv-btn').addEventListener('click', () => {
-    const t = document.getElementById('inv-txt').value;
+  $('#inv-btn').on('click', () => {
+    const t = $('#inv-txt').val();
     setOut('inv-out', invertirTexto(t));
     award('invertir');
   });
 
   // 6) Multiplicar
-  document.getElementById('mul-btn').addEventListener('click', () => {
-    const a = document.getElementById('mul-a').value;
-    const b = document.getElementById('mul-b').value;
+  $('#mul-btn').on('click', () => {
+    const a = $('#mul-a').val();
+    const b = $('#mul-b').val();
     setOut('mul-out', multiplicar(a,b));
     award('multiplicar');
   });
 
   // 7) Máximo
-  document.getElementById('max-btn').addEventListener('click', () => {
-    const lista = parseListaNumeros(document.getElementById('max-list').value);
+  $('#max-btn').on('click', () => {
+    const lista = parseListaNumeros($('#max-list').val());
     const r = maximo(lista);
     setOut('max-out', r===null ? 'Lista vacía' : r);
     award('maximo', r!==null);
   });
 
   // 8) Promedio
-  document.getElementById('avg-btn').addEventListener('click', () => {
-    const lista = parseListaNumeros(document.getElementById('avg-list').value);
+  $('#avg-btn').on('click', () => {
+    const lista = parseListaNumeros($('#avg-list').val());
     const r = promedio(lista);
     setOut('avg-out', r===null ? 'Lista vacía' : r);
     award('promedio', r!==null);
   });
 
   // 9) Aleatorio
-  document.getElementById('rnd-btn').addEventListener('click', () => {
-    const min = document.getElementById('rnd-min').value;
-    const max = document.getElementById('rnd-max').value;
+  $('#rnd-btn').on('click', () => {
+    const min = $('#rnd-min').val();
+    const max = $('#rnd-max').val();
     try {
       const r = randomEntero(min,max);
       setOut('rnd-out', r);
@@ -191,9 +172,9 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   // 10) División
-  document.getElementById('div-btn').addEventListener('click', () => {
-    const a = document.getElementById('div-a').value;
-    const b = document.getElementById('div-b').value;
+  $('#div-btn').on('click', () => {
+    const a = $('#div-a').val();
+    const b = $('#div-b').val();
     try {
       const r = dividir(a,b);
       setOut('div-out', r);
