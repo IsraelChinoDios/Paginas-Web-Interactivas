@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unsplash con jQuery AJAX</title>
+
+  <!-- CDN de jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- CDN de TailwindCSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-6">
+
+  <h1 class="text-2xl font-bold mb-4">Buscar imágenes en Unsplash</h1>
+  
+  <input id="search" type="text" placeholder="Escribe una palabra..." class="border p-2 rounded">
+  <button id="btnBuscar" class="bg-blue-500 text-white px-4 py-2 rounded ml-2">Buscar</button>
+
+  <div id="results" class="grid grid-cols-3 gap-4 mt-6"></div>
+
+  <script>
+    const accessKey = "SXBFRMjwfvrt2qeirAHx_vgiqXrmc-hJBP-7d3LAPeU";
+
+    $("#btnBuscar").on("click", function() {
+      let query = $("#search").val();
+
+      if (!query) {
+        alert("Escribe algo para buscar.");
+        return;
+      }
+
+      $.ajax({
+        url: "https://api.unsplash.com/search/photos",
+        method: "GET",
+        data: {
+          query: query,
+          per_page: 9,
+          client_id: accessKey
+        },
+        success: function(response) {
+            console.log(response);
+          $("#results").empty();
+
+          response.results.forEach(img => {
+            $("#results").append(`
+              <div class="bg-white shadow rounded overflow-hidden">
+                <img src="${img.urls.small}" alt="${img.alt_description}" class="w-full">
+                <div class="p-2 text-sm text-gray-700">
+                  📸 ${img.user.name}
+                </div>
+              </div>
+            `);
+          });
+        },
+        error: function(error) {
+          console.error("Error en la petición:", error);
+          alert("Hubo un error al traer las imágenes.");
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
