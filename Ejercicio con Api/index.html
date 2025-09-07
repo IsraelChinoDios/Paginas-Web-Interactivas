@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body>
+    <div class="container mx-auto p-4">
+        <h1 class="text 3x1 font-bold mb-6 text-center">Musica</h1>
+
+        <div>
+            <label for="">Nombre</label>
+            <input type="text" id="music-name">
+            <label for="">Password</label>
+            <input type="password" id="music-password" class="">
+            <button id="music-submit">Agregar musica</button>
+
+        </div>
+
+        <div id="music-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            
+        </div>
+
+    </div>
+
+<script>
+    $(document).ready(function() {
+        $.ajax({
+            method: 'GET',
+            url: 'https://66da2e18f47a05d55be436e2.mockapi.io/appweb/musica',
+        }).done(function(data) {
+            console.log(data);
+            data.forEach(function(musica){
+                $('#music-list').append(`
+                <div class="bg-purple-500 rounded-lg shadow-md p-4">
+                    <img src="${musica.imagen}" alt="${musica.name}" class="w-full h-32 object-cover rounded-md mb-2">
+                    <h2 class="text-xl font-semibold mb-2">${musica.name}</h2>
+                    <p class="text-gray-600">${musica.autor}</p>
+                </div>
+                `);
+            }
+            )
+        })
+    });
+
+    $('music-submit').click(function(){
+        var name = $('#music-name').val();
+        var password = $('#music-password').val();
+        $.ajax({
+            method: 'POST',
+            url: 'https://66da2e18f47a05d55be436e2.mockapi.io/appweb/Usuarios',
+            data: {
+                nombre: name,
+                password: password,
+                avatar: "https://images.hdqwalls.com/wallpapers/lebron-james-zt.jpg"
+            }
+        }).done(function(data){
+            console.log('Usuario agregado:', data);
+        })
+    }
+    )
+
+</script>
+
+</body>
+</html>
