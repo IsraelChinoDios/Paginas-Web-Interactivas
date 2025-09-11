@@ -35,7 +35,7 @@
           <input id="user" type="text"
                  placeholder="Tu usuario o correo"
                  required
-                 class="w-full bg-white border border-gray-300 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-300/30 rounded-xl px-3 py-3 outline-none transition">
+                 class="w-full bg-white border border-gray-300 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-300/30 rounded-xl px-3 py-3 outline-none ">
         </label>
 
         <!-- Contraseña -->
@@ -45,10 +45,10 @@
             <input id="pass" type="password"
                    placeholder="••••••••"
                    required
-                   class="w-full bg-white border border-gray-300 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-300/30 rounded-xl px-3 py-3 pr-12 outline-none transition">
-            <button type="button" id="togglePass" aria-label="Mostrar u ocultar contraseña"
+                   class="w-full bg-white border border-gray-300 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-300/30 rounded-xl px-3 py-3 pr-12 outline-none">
+            <button type="button" id="togglePass"
                     class="absolute inset-y-0 right-2 grid place-items-center px-2 text-gray-500 hover:text-yellow-600">
-              <img src="./assets/eye.png" alt="Mostrar contraseña" class="w-6 h-6" id="iconEye">
+              <img src="./assets/eye.png" class="w-6 h-6" id="iconEye">
             </button>
           </div>
         </label>
@@ -58,7 +58,7 @@
 
         <!-- Botón -->
         <button id="btnLogin" type="submit"
-                class="w-full inline-flex items-center justify-center gap-2 bg-yellow-400 text-black font-bold rounded-xl px-4 py-3">
+                class="w-full inline-flex items-center justify-center gap-2 bg-yellow-400 text-white font-bold rounded-xl px-4 py-3">
           <span class="select-none">Entrar</span>
         </button>
       </form>
@@ -67,6 +67,8 @@
 
   <script>
     $(function () {
+      alert("Prof este inicio de sesión es simulado.\nPuede escribir cualquier cosa y pues igual lo dejará entrar.");
+
       $("#user").trigger("focus");
 
       // mostrar/ocultar contraseña
@@ -87,10 +89,10 @@
       // login simulado
       $("#loginForm").on("submit", function (e) {
         e.preventDefault();
-        $("#msg").text("Validando").addClass("text-green-500");
+        $("#msg").text("Validando…").removeClass("text-red-500").addClass("text-green-500");
         setTimeout(function () {
           window.location.href = "gallery.html";
-        }, 2000);
+        }, 1500);
       });
     });
   </script>

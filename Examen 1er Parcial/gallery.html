@@ -17,71 +17,103 @@
 
   <!-- Header -->
   <header class="sticky top-0 z-10 bg-white border-b border-gray-200">
-    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center gap-4">
-      <!-- Marca (clic -> gallery.html) -->
-      <div id="brand"
-           class="flex items-center gap-3 cursor-pointer select-none rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 hover:opacity-90 px-1"
-           role="link" tabindex="0" aria-label="Ir a The Gallery (inicio)">
-        <img src="./assets/palette.png" alt="Paleta de arte" class="w-12 h-12 object-contain">
-        <h1 class="text-2xl sm:text-3xl font-bold text-yellow-400">The Gallery</h1>
-      </div>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex flex-wrap items-center gap-3 sm:gap-4">
 
-      <!-- Buscador -->
-      <form id="search-form" class="flex-1 flex items-center gap-2">
-        <input id="q" type="search" placeholder="Buscar fotos…"
-               class="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-               aria-label="Buscar" />
-        <button class="px-4 py-2 bg-yellow-400 text-white font-semibold rounded-lg hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500">
-          Buscar
-        </button>
-      </form>
-
-      <!-- Acciones -->
-      <nav class="flex items-center gap-2">
-        <button id="btn-favs"
-                class="px-4 py-2 rounded-lg border border-yellow-400 text-yellow-600 hover:bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                aria-pressed="false" title="Ver favoritos">
-          ❤ Favoritos
-        </button>
-        <a href="publi.html"
-           class="px-4 py-2 rounded-lg bg-yellow-400 text-white font-semibold hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500">
-          Publicar
-        </a>
-      </nav>
+    <!-- Marca -->
+    <div id="brand"
+         class="flex items-center gap-2 sm:gap-3 cursor-pointer select-none rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 hover:opacity-90 px-1
+                w-full sm:w-auto">
+      <img src="./assets/palette.png" alt="Paleta de arte" class="w-10 h-10 sm:w-12 sm:h-12 object-contain">
+      <h1 class="text-xl sm:text-3xl font-bold text-yellow-400 leading-tight">The Gallery</h1>
     </div>
-  </header>
+
+    <!-- Buscador -->
+    <form id="search-form"
+          class="order-last sm:order-none w-full sm:flex-1 flex items-center gap-2 mt-1 sm:mt-0">
+      <input id="q" type="search" placeholder="Buscar fotos…"
+             class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+             aria-label="Buscar" />
+      <button
+        class="shrink-0 px-4 py-2 bg-yellow-400 text-white font-semibold rounded-lg hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+        Buscar
+      </button>
+    </form>
+
+    <nav class="ml-auto w-full sm:w-auto flex items-center gap-2 mt-1 sm:mt-0">
+      <button id="btn-favs"
+              class="px-4 py-2 rounded-lg border border-yellow-400 text-yellow-600 hover:bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              aria-pressed="false" title="Ver favoritos">
+        ❤ Favoritos
+      </button>
+    </nav>
+
+  </div>
+</header>
+
 
   <!-- Contenido -->
   <main class="max-w-6xl mx-auto px-6 py-8">
     <div id="results" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
   </main>
 
-  <!-- Lightbox / Modal de imagen -->
+  <!-- Lightbox -->
   <div id="lightbox"
-      class="fixed inset-0 bg-black bg-opacity-70 hidden z-50 items-center justify-center p-4 overflow-auto"
-      role="dialog" aria-modal="true" aria-labelledby="lb-caption">
-    <!-- Botón cerrar (ahora encima de todo) -->
+       class="fixed inset-0 bg-black bg-opacity-70 hidden z-50 items-center justify-center p-4 overflow-auto"
+       role="dialog" aria-modal="true" aria-labelledby="lb-caption">
     <button id="lb-close"
             class="z-20 absolute top-4 right-4 text-white text-2xl bg-black bg-opacity-30 hover:bg-opacity-60 rounded-full w-10 h-10 grid place-items-center focus:outline-none focus:ring-2 focus:ring-white"
             aria-label="Cerrar">
       &times;
     </button>
 
-    <!-- Contenedor centrado que NO captura clics de fondo -->
     <div class="pointer-events-none max-w-screen-xl max-h-screen w-full h-full flex items-center justify-center">
       <img id="lb-img"
-          src=""
-          alt=""
-          class="pointer-events-auto w-full h-full object-contain rounded-lg shadow-2xl scale-in-center" />
+           src=""
+           alt=""
+           class="pointer-events-auto w-full h-full object-contain rounded-lg shadow-2xl scale-in-center" />
     </div>
+
+    <div id="lb-caption" class="sr-only" aria-live="polite"></div>
   </div>
 
+  <!-- Botón flotante -->
+  <button id="btn-contact"
+          class="fixed bottom-4 right-4 z-40 px-4 py-3 rounded-full bg-yellow-400 text-white font-semibold shadow-lg hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+    Contacto
+  </button>
+
+  <!-- Modal de Contacto -->
+  <div id="contact-modal"
+       class="fixed inset-0 hidden z-50 items-center justify-center p-4 bg-black bg-opacity-60"
+       role="dialog" aria-modal="true" aria-labelledby="contact-title">
+    <div class="relative bg-white rounded-xl shadow-xl w-full max-w-md p-6">
+      <button id="contact-close"
+              class="absolute top-3 right-3 w-9 h-9 grid place-items-center rounded-full bg-black bg-opacity-10 hover:bg-opacity-20 text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300"
+              aria-label="Cerrar">&times;</button>
+
+      <h2 id="contact-title" class="text-xl font-bold mb-4">Contacto</h2>
+
+      <div class="space-y-3 text-gray-700">
+        <div>
+          <div class="font-semibold">Dirección</div>
+            <p>Calle Manuel Nava #450, San Luis Potosí, SLP, México</p>
+        </div>
+        <div>
+          <div class="font-semibold">Teléfono</div>
+            <p>+52 123 456 7890</p>
+        </div>
+        <div>
+          <div class="font-semibold">Correo</div>
+            <p>contacto@thegallery.com</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
     const accessKey = "SXBFRMjwfvrt2qeirAHx_vgiqXrmc-hJBP-7d3LAPeU";
 
-    // ===== Estado =====
-    let lastResults = [];   // último listado mostrado (no-favoritos)
+    let lastResults = [];
     let showingFavs = false;
 
     const favKey = 'favs_v1';
@@ -91,16 +123,16 @@
     };
     const setFavMap = (m) => localStorage.setItem(favKey, JSON.stringify(m));
 
-    // Marca activa del botón Favoritos
+    // Marca botón Favoritos
     function setFavsButtonActive(active) {
       const $b = $('#btn-favs');
       $b.attr('aria-pressed', String(active));
       if (active) {
-        $b.removeClass('border-yellow-400 text-yellow-600 hover:bg-yellow-50')
+        $b.removeClass('border-yellow-400 text-yellow-600 hover:bg-red-50')
           .addClass('bg-yellow-400 text-white hover:bg-yellow-500');
       } else {
         $b.removeClass('bg-yellow-400 text-white hover:bg-yellow-500')
-          .addClass('border border-yellow-400 text-yellow-600 hover:bg-yellow-50');
+          .addClass('border border-yellow-400 text-yellow-600 hover:bg-red-50');
       }
     }
 
@@ -109,7 +141,7 @@
       const favs = getFavMap();
       const $root = $('#results').empty();
 
-      list.forEach((img, idx) => {
+      list.forEach((img) => {
         const isFav = !!favs[img.id];
         const heartCls = isFav ? 'text-red-500' : 'text-gray-400';
 
@@ -123,10 +155,10 @@
             </button>
 
             <a href="${img.link}" target="_blank" rel="noopener noreferrer"
-              data-large="${img.large}" data-alt="${img.alt}">
+               data-large="${img.large}" data-alt="${img.alt}">
               <img src="${img.thumb}" loading="lazy"
-                  class="w-full h-60 object-cover"
-                  alt="${img.alt}">
+                   class="w-full h-60 object-cover"
+                   alt="${img.alt}">
             </a>
             <div class="p-3 text-sm text-gray-700">
               <span class="text-yellow-500">📸</span> ${img.user}
@@ -136,7 +168,6 @@
       });
     }
 
-    // Normaliza respuesta de Unsplash a nuestro formato
     function mapResult(photo) {
       const large = (photo.urls && (photo.urls.regular || photo.urls.full || photo.urls.small)) || '';
       const thumb = photo.urls?.small || large || '';
@@ -146,7 +177,7 @@
       return { id: photo.id, large, thumb, alt, link, user };
     }
 
-    // Cargar "recientes"
+    // Cargar recientes
     function fetchRecent() {
       showingFavs = false;
       setFavsButtonActive(false);
@@ -190,20 +221,20 @@
     function showFavorites() {
       showingFavs = true;
       setFavsButtonActive(true);
-      const favs = Object.values(getFavMap()); // array
+      const favs = Object.values(getFavMap()); // array de favoritos
       render(favs);
       if (favs.length === 0) {
-        $('#results').html('<p class="text-center text-gray-600">Aún no tienes favoritos ❤</p>');
+        $('#results').html('<p class="text-center text-gray-600">Aún no tienes favoritos</p>');
       }
     }
 
-    // ===== Lightbox =====
+    // Lightbox
     function openLightbox(src, alt) {
       const $lb  = $('#lightbox');
       const $img = $('#lb-img');
       $img.attr({ src, alt });
 
-      // Re-dispara animación (definida en animaciones.css)
+      // animación
       $img.removeClass('scale-in-center');
       void $img[0].offsetWidth;
       $img.addClass('scale-in-center');
@@ -218,9 +249,22 @@
       $('body').removeClass('overflow-hidden');
     }
 
-    // ===== Eventos =====
+    // Contacto (modal)
+    let lastFocus = null;
+    function openContact() {
+      lastFocus = document.activeElement;
+      $('#contact-modal').removeClass('hidden').addClass('flex');
+      $('body').addClass('overflow-hidden');
+      $('#contact-close').focus();
+    }
+    function closeContact() {
+      $('#contact-modal').addClass('hidden').removeClass('flex');
+      $('body').removeClass('overflow-hidden');
+      if (lastFocus) $(lastFocus).focus();
+    }
+
+    // Eventos
     $(function () {
-      // Marca: click/teclado -> home
       $('#brand').on('click keydown', function (e) {
         if (e.type === 'click' || e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -235,7 +279,7 @@
         searchPhotos(q);
       });
 
-      // Favoritos: toggle vista
+      // Favoritos
       $('#btn-favs').on('click', function () {
         if (showingFavs) {
           // volver a últimos resultados
@@ -247,11 +291,11 @@
         }
       });
 
-      // Toggle favorito en tarjeta
+      // favorito en tarjeta
       $('#results').on('click', '.fav-btn', function (e) {
         e.preventDefault();
         e.stopPropagation();
-        e.stopImmediatePropagation(); // asegura que no caiga en otros handlers delegados
+        e.stopImmediatePropagation();
 
         const id = String($(this).data('id'));
         const favs = getFavMap();
@@ -259,15 +303,13 @@
         if (favs[id]) {
           delete favs[id];
         } else {
-          // Buscar el item en los últimos resultados (más confiable)
           const item = (lastResults || []).find(x => String(x.id) === id);
-          if (!item) return; // nada que guardar
+          if (!item) return;
           favs[id] = item;
         }
 
         setFavMap(favs);
 
-        // Actualiza UI del corazón
         const isFav = !!favs[id];
         const $btn = $(this);
         $btn.attr('aria-pressed', String(isFav));
@@ -275,11 +317,10 @@
             .toggleClass('text-red-500', isFav)
             .toggleClass('text-gray-400', !isFav);
 
-        // Si estás viendo favoritos y quitaste uno, re-renderiza esa vista
         if (showingFavs && !isFav) showFavorites();
       });
 
-      // Abrir lightbox al click en imagen
+      // Abrir imagen
       $('#results').on('click', 'a[data-large]', function (e) {
         e.preventDefault();
         const src = $(this).data('large');
@@ -287,15 +328,26 @@
         if (src) openLightbox(src, alt);
       });
 
-      // Cerrar lightbox
-      $('#lb-close').on('click', closeLightbox);          // botón ✕
-      $('#lightbox').on('click', function (e) {           // clic fuera
+      // Cerrar imagen
+      $('#lb-close').on('click', closeLightbox);
+      $('#lightbox').on('click', function (e) {
         if (e.target.id === 'lightbox') closeLightbox();
       });
-      $(document).on('keydown', function (e) {            // ESC
-        if (e.key === 'Escape') closeLightbox();
+
+      // Abrir/Cerrar Contacto
+      $('#btn-contact').on('click', openContact);
+      $('#contact-close').on('click', closeContact);
+      $('#contact-modal').on('click', function (e) {
+        if (e.target.id === 'contact-modal') closeContact();
       });
 
+      $(document).on('keydown', function (e) {
+        if (e.key === 'Escape') {
+          // Cierra lo que esté abierto
+          if ($('#contact-modal').hasClass('flex')) return closeContact();
+          if ($('#lightbox').hasClass('flex')) return closeLightbox();
+        }
+      });
 
       // Carga inicial
       fetchRecent();
