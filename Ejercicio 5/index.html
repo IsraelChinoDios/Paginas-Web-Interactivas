@@ -13,40 +13,32 @@
 </head>
 <body class="bg-gray-100 p-6">
 
-  <h1 class="text-2xl font-bold mb-4">Buscar imágenes en Unsplash</h1>
-  
-  <input id="search" type="text" placeholder="Escribe una palabra..." class="border p-2 rounded">
-  <button id="btnBuscar" class="bg-blue-500 text-white px-4 py-2 rounded ml-2">Buscar</button>
+  <h1 class="text-2xl font-bold mb-4">Imágenes de Unsplash</h1>
 
-  <div id="results" class="grid grid-cols-3 gap-4 mt-6"></div>
+  <div id="results" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6"></div>
 
   <script>
     const accessKey = "SXBFRMjwfvrt2qeirAHx_vgiqXrmc-hJBP-7d3LAPeU";
 
-    $("#btnBuscar").on("click", function() {
-      let query = $("#search").val();
-
-      if (!query) {
-        alert("Escribe algo para buscar.");
-        return;
-      }
-
+    // Llamada directa al cargar la página
+    $(document).ready(function() {
       $.ajax({
-        url: "https://api.unsplash.com/search/photos",
+        url: "https://api.unsplash.com/photos",
         method: "GET",
         data: {
-          query: query,
-          per_page: 9,
+          per_page: 10,
           client_id: accessKey
         },
         success: function(response) {
-            console.log(response);
+          console.log(response);
           $("#results").empty();
 
-          response.results.forEach(img => {
+          response.forEach(img => {
             $("#results").append(`
               <div class="bg-white shadow rounded overflow-hidden">
-                <img src="${img.urls.small}" alt="${img.alt_description}" class="w-full">
+                <a href="${img.links.html}" target="_blank">
+                  <img src="${img.urls.small}" alt="${img.alt_description}" class="w-full hover:opacity-80 transition">
+                </a>
                 <div class="p-2 text-sm text-gray-700">
                   📸 ${img.user.name}
                 </div>

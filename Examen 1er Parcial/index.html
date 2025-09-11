@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Iniciar sesión — Galería</title>
+
+  <!-- Animaciones -->
+  <link rel="stylesheet" href="./animaciones.css">
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Tailwind -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-amber-50 text-gray-900">
+
+  <main class="place-items-center gap-5 px-4 py-8">
+
+    <header class="grid justify-items-center gap-2">
+      <img src="./assets/palette.png" class="w-40 h-40 object-contain swirl-in-fwd">
+      <h1 class="text-6xl font-extrabold text-yellow-400 scale-in-center">The Gallery</h1>
+      <p class="text-sm text-gray-600 scale-in-center">Revisa nuestra colección</p>
+    </header>
+
+    <!-- Tarjeta de login -->
+    <section class="w-full max-w-md bg-white border border-gray-200 rounded-2xl m-10 p-5 shadow-lg scale-in-center">
+      <h2 id="title-login" class="sr-only">Iniciar sesión</h2>
+
+      <form id="loginForm" class="grid gap-4">
+        <!-- Usuario -->
+        <label class="grid gap-1">
+          <span class="text-sm text-gray-700">Usuario</span>
+          <input id="user" type="text"
+                 placeholder="Tu usuario o correo"
+                 required
+                 class="w-full bg-white border border-gray-300 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-300/30 rounded-xl px-3 py-3 outline-none transition">
+        </label>
+
+        <!-- Contraseña -->
+        <label class="grid gap-1">
+          <span class="text-sm text-gray-700">Contraseña</span>
+          <div class="relative">
+            <input id="pass" type="password"
+                   placeholder="••••••••"
+                   required
+                   class="w-full bg-white border border-gray-300 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-300/30 rounded-xl px-3 py-3 pr-12 outline-none transition">
+            <button type="button" id="togglePass" aria-label="Mostrar u ocultar contraseña"
+                    class="absolute inset-y-0 right-2 grid place-items-center px-2 text-gray-500 hover:text-yellow-600">
+              <img src="./assets/eye.png" alt="Mostrar contraseña" class="w-6 h-6" id="iconEye">
+            </button>
+          </div>
+        </label>
+
+        <!-- Mensajes -->
+        <p id="msg" class="text-sm"></p>
+
+        <!-- Botón -->
+        <button id="btnLogin" type="submit"
+                class="w-full inline-flex items-center justify-center gap-2 bg-yellow-400 text-black font-bold rounded-xl px-4 py-3">
+          <span class="select-none">Entrar</span>
+        </button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    $(function () {
+      $("#user").trigger("focus");
+
+      // mostrar/ocultar contraseña
+      $("#togglePass").on("click", function () {
+        const $input = $("#pass");
+        const $icon  = $("#iconEye");
+        const isPwd = $input.attr("type") === "password";
+
+        if (isPwd) {
+          $input.attr("type", "text");
+          $icon.attr({ src: "./assets/hide-eye.png"});
+        } else {
+          $input.attr("type", "password");
+          $icon.attr({ src: "./assets/eye.png"});
+        }
+      });
+
+      // login simulado
+      $("#loginForm").on("submit", function (e) {
+        e.preventDefault();
+        $("#msg").text("Validando").addClass("text-green-500");
+        setTimeout(function () {
+          window.location.href = "gallery.html";
+        }, 2000);
+      });
+    });
+  </script>
+</body>
+</html>

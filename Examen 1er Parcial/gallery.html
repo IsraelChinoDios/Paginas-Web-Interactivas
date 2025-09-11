@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Gallery</title>
+
+  <link rel="stylesheet" href="./animaciones.css">
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Tailwind v2 -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-amber-50 text-gray-900">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-10 bg-white border-b border-gray-200">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center gap-4">
+      <!-- Marca (clic -> gallery.html) -->
+      <div id="brand"
+           class="flex items-center gap-3 cursor-pointer select-none rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 hover:opacity-90 px-1"
+           role="link" tabindex="0" aria-label="Ir a The Gallery (inicio)">
+        <img src="./assets/palette.png" alt="Paleta de arte" class="w-12 h-12 object-contain">
+        <h1 class="text-2xl sm:text-3xl font-bold text-yellow-400">The Gallery</h1>
+      </div>
+
+      <!-- Buscador -->
+      <form id="search-form" class="flex-1 flex items-center gap-2">
+        <input id="q" type="search" placeholder="Buscar fotos…"
+               class="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+               aria-label="Buscar" />
+        <button class="px-4 py-2 bg-yellow-400 text-white font-semibold rounded-lg hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+          Buscar
+        </button>
+      </form>
+
+      <!-- Acciones -->
+      <nav class="flex items-center gap-2">
+        <button id="btn-favs"
+                class="px-4 py-2 rounded-lg border border-yellow-400 text-yellow-600 hover:bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                aria-pressed="false" title="Ver favoritos">
+          ❤ Favoritos
+        </button>
+        <a href="publi.html"
+           class="px-4 py-2 rounded-lg bg-yellow-400 text-white font-semibold hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+          Publicar
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Contenido -->
+  <main class="max-w-6xl mx-auto px-6 py-8">
+    <div id="results" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+  </main>
+
+  <!-- Lightbox / Modal de imagen -->
+  <div id="lightbox"
+      class="fixed inset-0 bg-black bg-opacity-70 hidden z-50 items-center justify-center p-4 overflow-auto"
+      role="dialog" aria-modal="true" aria-labelledby="lb-caption">
+    <!-- Botón cerrar (ahora encima de todo) -->
+    <button id="lb-close"
+            class="z-20 absolute top-4 right-4 text-white text-2xl bg-black bg-opacity-30 hover:bg-opacity-60 rounded-full w-10 h-10 grid place-items-center focus:outline-none focus:ring-2 focus:ring-white"
+            aria-label="Cerrar">
+      &times;
+    </button>
+
+    <!-- Contenedor centrado que NO captura clics de fondo -->
+    <div class="pointer-events-none max-w-screen-xl max-h-screen w-full h-full flex items-center justify-center">
+      <img id="lb-img"
+          src=""
+          alt=""
+          class="pointer-events-auto w-full h-full object-contain rounded-lg shadow-2xl scale-in-center" />
+    </div>
+  </div>
+
+
+  <script>
+    const accessKey = "SXBFRMjwfvrt2qeirAHx_vgiqXrmc-hJBP-7d3LAPeU";
+
+    // ===== Estado =====
+    let lastResults = [];   // último listado mostrado (no-favoritos)
+    let showingFavs = false;
+
+    const favKey = 'favs_v1';
+    const getFavMap = () => {
+      try { return JSON.parse(localStorage.getItem(favKey) || '{}'); }
+      catch { return {}; }
+    };
+    const setFavMap = (m) => localStorage.setItem(favKey, JSON.stringify(m));
+
+    // Marca activa del botón Favoritos
+    function setFavsButtonActive(active) {
+      const $b = $('#btn-favs');
+      $b.attr('aria-pressed', String(active));
+      if (active) {
+        $b.removeClass('border-yellow-400 text-yellow-600 hover:bg-yellow-50')
+          .addClass('bg-yellow-400 text-white hover:bg-yellow-500');
+      } else {
+        $b.removeClass('bg-yellow-400 text-white hover:bg-yellow-500')
+          .addClass('border border-yellow-400 text-yellow-600 hover:bg-yellow-50');
+      }
+    }
+
+    // Render de tarjetas
+    function render(list) {
+      const favs = getFavMap();
+      const $root = $('#results').empty();
+
+      list.forEach((img, idx) => {
+        const isFav = !!favs[img.id];
+        const heartCls = isFav ? 'text-red-500' : 'text-gray-400';
+
+        $root.append(`
+          <div class="relative bg-white border border-gray-200 rounded-xl overflow-hidden scale-in-center">
+            <!-- Botón favorito -->
+            <button type="button"
+                    class="fav-btn z-10 absolute top-2 right-2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full w-9 h-9 grid place-items-center shadow-md focus:outline-none focus:ring-2 focus:ring-red-400"
+                    data-id="${img.id}" aria-pressed="${isFav}">
+              <span class="text-xl leading-none ${heartCls}">❤</span>
+            </button>
+
+            <a href="${img.link}" target="_blank" rel="noopener noreferrer"
+              data-large="${img.large}" data-alt="${img.alt}">
+              <img src="${img.thumb}" loading="lazy"
+                  class="w-full h-60 object-cover"
+                  alt="${img.alt}">
+            </a>
+            <div class="p-3 text-sm text-gray-700">
+              <span class="text-yellow-500">📸</span> ${img.user}
+            </div>
+          </div>
+        `);
+      });
+    }
+
+    // Normaliza respuesta de Unsplash a nuestro formato
+    function mapResult(photo) {
+      const large = (photo.urls && (photo.urls.regular || photo.urls.full || photo.urls.small)) || '';
+      const thumb = photo.urls?.small || large || '';
+      const alt   = (photo.alt_description || `Photo by ${photo.user?.name || 'Unknown'}`).replace(/"/g, '&quot;');
+      const link  = photo.links?.html || '#';
+      const user  = photo.user?.name || 'Unknown';
+      return { id: photo.id, large, thumb, alt, link, user };
+    }
+
+    // Cargar "recientes"
+    function fetchRecent() {
+      showingFavs = false;
+      setFavsButtonActive(false);
+      $.ajax({
+        url: "https://api.unsplash.com/photos",
+        method: "GET",
+        data: { per_page: 12, client_id: accessKey }
+      })
+      .done((response) => {
+        lastResults = (response || []).map(mapResult);
+        render(lastResults);
+      })
+      .fail((error) => {
+        console.error("Error en la petición:", error);
+        alert("Hubo un error al traer las imágenes.");
+      });
+    }
+
+    // Buscar
+    function searchPhotos(query) {
+      if (!query || !query.trim()) return fetchRecent();
+      showingFavs = false;
+      setFavsButtonActive(false);
+      $.ajax({
+        url: "https://api.unsplash.com/search/photos",
+        method: "GET",
+        data: { query, per_page: 12, client_id: accessKey }
+      })
+      .done((response) => {
+        const results = (response?.results || []).map(mapResult);
+        lastResults = results;
+        render(results);
+      })
+      .fail((error) => {
+        console.error("Error en la búsqueda:", error);
+        alert("Hubo un error con la búsqueda.");
+      });
+    }
+
+    // Mostrar favoritos
+    function showFavorites() {
+      showingFavs = true;
+      setFavsButtonActive(true);
+      const favs = Object.values(getFavMap()); // array
+      render(favs);
+      if (favs.length === 0) {
+        $('#results').html('<p class="text-center text-gray-600">Aún no tienes favoritos ❤</p>');
+      }
+    }
+
+    // ===== Lightbox =====
+    function openLightbox(src, alt) {
+      const $lb  = $('#lightbox');
+      const $img = $('#lb-img');
+      $img.attr({ src, alt });
+
+      // Re-dispara animación (definida en animaciones.css)
+      $img.removeClass('scale-in-center');
+      void $img[0].offsetWidth;
+      $img.addClass('scale-in-center');
+
+      $lb.removeClass('hidden').addClass('flex');
+      $('body').addClass('overflow-hidden');
+      $('#lb-close').focus();
+    }
+    function closeLightbox() {
+      $('#lb-img').attr('src', '');
+      $('#lightbox').addClass('hidden').removeClass('flex');
+      $('body').removeClass('overflow-hidden');
+    }
+
+    // ===== Eventos =====
+    $(function () {
+      // Marca: click/teclado -> home
+      $('#brand').on('click keydown', function (e) {
+        if (e.type === 'click' || e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          window.location.href = 'gallery.html';
+        }
+      });
+
+      // Buscar
+      $('#search-form').on('submit', function (e) {
+        e.preventDefault();
+        const q = String($('#q').val() || '').trim();
+        searchPhotos(q);
+      });
+
+      // Favoritos: toggle vista
+      $('#btn-favs').on('click', function () {
+        if (showingFavs) {
+          // volver a últimos resultados
+          showingFavs = false;
+          setFavsButtonActive(false);
+          render(lastResults);
+        } else {
+          showFavorites();
+        }
+      });
+
+      // Toggle favorito en tarjeta
+      $('#results').on('click', '.fav-btn', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation(); // asegura que no caiga en otros handlers delegados
+
+        const id = String($(this).data('id'));
+        const favs = getFavMap();
+
+        if (favs[id]) {
+          delete favs[id];
+        } else {
+          // Buscar el item en los últimos resultados (más confiable)
+          const item = (lastResults || []).find(x => String(x.id) === id);
+          if (!item) return; // nada que guardar
+          favs[id] = item;
+        }
+
+        setFavMap(favs);
+
+        // Actualiza UI del corazón
+        const isFav = !!favs[id];
+        const $btn = $(this);
+        $btn.attr('aria-pressed', String(isFav));
+        $btn.find('span')
+            .toggleClass('text-red-500', isFav)
+            .toggleClass('text-gray-400', !isFav);
+
+        // Si estás viendo favoritos y quitaste uno, re-renderiza esa vista
+        if (showingFavs && !isFav) showFavorites();
+      });
+
+      // Abrir lightbox al click en imagen
+      $('#results').on('click', 'a[data-large]', function (e) {
+        e.preventDefault();
+        const src = $(this).data('large');
+        const alt = $(this).data('alt') || 'Image';
+        if (src) openLightbox(src, alt);
+      });
+
+      // Cerrar lightbox
+      $('#lb-close').on('click', closeLightbox);          // botón ✕
+      $('#lightbox').on('click', function (e) {           // clic fuera
+        if (e.target.id === 'lightbox') closeLightbox();
+      });
+      $(document).on('keydown', function (e) {            // ESC
+        if (e.key === 'Escape') closeLightbox();
+      });
+
+
+      // Carga inicial
+      fetchRecent();
+    });
+  </script>
+
+</body>
+</html>
