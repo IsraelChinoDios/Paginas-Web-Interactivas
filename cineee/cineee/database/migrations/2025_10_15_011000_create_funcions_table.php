@@ -18,8 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('sala_id');
             $table->string('tipo'); // 2D, 3D, IMAX
             $table->double('costo');
-            $table->foreing('pelicula_id')->references('id')->on('peliculas');
-            $table->foreing('sala_id')->references('id')->on('salas');
+            $table->foreign('pelicula_id')->references('id')->on('peliculas');
+            $table->foreign('sala_id')->references('id')->on('salas');
             $table->timestamps();
         });
     }
