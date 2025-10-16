@@ -9,18 +9,17 @@ use App\Http\Controllers\Cliente\HomeController as ClienteHomeController;
 use App\Http\Controllers\Cliente\PagoController as ClientePagoController;
 use App\Http\Controllers\Cliente\MovimientoController as ClienteMovimientoController;
 
-// ---------- Invitados ----------
+// Invitados
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'show'])->name('login');
     Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 });
 
-// ---------- Autenticados ----------
+// Autenticados
 Route::post('/logout', [LoginController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
 
-// Ruta neutra: decide a dónde ir según el rol (evita loops)
 Route::middleware('auth')->get('/redir', function () {
     $user = auth()->user();
 
@@ -47,21 +46,21 @@ Route::middleware(['auth', 'role:cliente'])->get('/cliente', function () {
     return view('dashboards.cliente');
 })->name('cliente.home');
 
-// ---------- Raíz ----------
+// Raíz
 Route::get('/', function () {
     return auth()->check()
-        ? redirect()->route('redir')   // si ya está logueado → manda por rol
+        ? redirect()->route('redir')
         : redirect()->route('login');  // invitado → login
 });
 
 Route::prefix('admin')->middleware(['auth','role:administrador'])->group(function () {
     Route::resource('crudempleados', EmpleadoController::class)
         ->names('admin.crudempleados')
-        ->parameters(['crudempleados' => 'empleado']); // <- binding: {empleado}
+        ->parameters(['crudempleados' => 'empleado']); 
 
     Route::resource('crudclientes',  ClienteController::class)
         ->names('admin.crudclientes')
-        ->parameters(['crudclientes' => 'cliente']);   // <- binding: {cliente}
+        ->parameters(['crudclientes' => 'cliente']);
 
     Route::resource('cuentas', CuentaController::class)
         ->names('admin.cuentas')
@@ -83,11 +82,9 @@ Route::prefix('empleado')->middleware(['auth','role:empleado'])->group(function 
 Route::prefix('cliente')->middleware(['auth','role:cliente'])->group(function () {
     Route::get('/', [ClienteHomeController::class, 'index'])->name('cliente.home');
 
-    // Listados (filtrados por cuenta del cliente)
     Route::get('/pagos', [ClientePagoController::class, 'index'])->name('cliente.pagos.index');
     Route::get('/movimientos', [ClienteMovimientoController::class, 'index'])->name('cliente.movimientos.index');
 
-    // Altas (se recibe ?cuenta=ID)
     Route::get('/pagos/create', [ClientePagoController::class, 'create'])->name('cliente.pagos.create');
     Route::post('/pagos', [ClientePagoController::class, 'store'])->name('cliente.pagos.store');
 
