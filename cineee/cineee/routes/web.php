@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\SalaController;
+use App\Http\Controllers\SucursalController;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -17,6 +19,9 @@ Route::view('dashboard', 'dashboard')
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
+
+    Route::resource('sucursales', SucursalController::class)->except(['show', 'create', 'edit']);
+    Route::resource('salas', SalaController::class)->except(['show', 'create', 'edit']);
 
     Route::get('settings/profile', Profile::class)->name('settings.profile');
     Route::get('settings/password', Password::class)->name('settings.password');

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('direccion');
             $table->string('director');
             $table->string('telefono');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -29,4 +30,3 @@ return new class extends Migration
         Schema::dropIfExists('sucursals');
     }
 };
-

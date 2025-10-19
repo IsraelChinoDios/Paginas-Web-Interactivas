@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('capacidad');
             $table->unsignedBigInteger('sucursal_id');
             $table->foreign('sucursal_id')->references('id')->on('sucursals');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
