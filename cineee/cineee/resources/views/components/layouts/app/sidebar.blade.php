@@ -16,7 +16,7 @@
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
                     <flux:navlist.item icon="home" :href="route('sucursales.index')" :current="request()->routeIs('sucursales.*')" wire:navigate>{{ __('Sucursales') }}</flux:navlist.item>
                     <flux:navlist.item icon="home" :href="route('salas.index')" :current="request()->routeIs('salas.*')" wire:navigate>{{ __('Salas') }}</flux:navlist.item>
-                    <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Peliculas') }}</flux:navlist.item>
+                    <flux:navlist.item icon="home" :href="route('peliculas.index')" :current="request()->routeIs('peliculas.*')" wire:navigate>{{ __('Peliculas') }}</flux:navlist.item>
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Funciones') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
