@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FuncionController;
 use App\Http\Controllers\PeliculaController;
 use App\Http\Controllers\SalaController;
 use App\Http\Controllers\SucursalController;
@@ -24,6 +25,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('sucursales', SucursalController::class)->except(['show', 'create', 'edit']);
     Route::resource('salas', SalaController::class)->except(['show', 'create', 'edit']);
     Route::resource('peliculas', PeliculaController::class)->except(['show', 'create', 'edit']);
+    Route::resource('funciones', FuncionController::class)->except(['show', 'create', 'edit']);
 
     Route::get('settings/profile', Profile::class)->name('settings.profile');
     Route::get('settings/password', Password::class)->name('settings.password');
