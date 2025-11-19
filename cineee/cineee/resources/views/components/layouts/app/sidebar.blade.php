@@ -12,13 +12,26 @@
             </a>
 
             <flux:navlist variant="outline">
-                <flux:navlist.group :heading="__('Administrador')" class="grid">
-                    <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                    <flux:navlist.item icon="home" :href="route('sucursales.index')" :current="request()->routeIs('sucursales.*')" wire:navigate>{{ __('Sucursales') }}</flux:navlist.item>
-                    <flux:navlist.item icon="home" :href="route('salas.index')" :current="request()->routeIs('salas.*')" wire:navigate>{{ __('Salas') }}</flux:navlist.item>
-                    <flux:navlist.item icon="home" :href="route('peliculas.index')" :current="request()->routeIs('peliculas.*')" wire:navigate>{{ __('Peliculas') }}</flux:navlist.item>
-                    <flux:navlist.item icon="home" :href="route('funciones.index')" :current="request()->routeIs('funciones.*')" wire:navigate>{{ __('Funciones') }}</flux:navlist.item>
-                </flux:navlist.group>
+                @if (auth()->user()?->role === 'admin')
+                    <flux:navlist.group :heading="__('Administrador')" class="grid">
+                        <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                        <flux:navlist.item icon="home" :href="route('sucursales.index')" :current="request()->routeIs('sucursales.*')" wire:navigate>{{ __('Sucursales') }}</flux:navlist.item>
+                        <flux:navlist.item icon="home" :href="route('salas.index')" :current="request()->routeIs('salas.*')" wire:navigate>{{ __('Salas') }}</flux:navlist.item>
+                        <flux:navlist.item icon="home" :href="route('peliculas.index')" :current="request()->routeIs('peliculas.*')" wire:navigate>{{ __('Peliculas') }}</flux:navlist.item>
+                        <flux:navlist.item icon="home" :href="route('funciones.index')" :current="request()->routeIs('funciones.*')" wire:navigate>{{ __('Funciones') }}</flux:navlist.item>
+                    </flux:navlist.group>
+                @endif
+
+                @if (auth()->user()?->role === 'usuario')
+                    <flux:navlist.group :heading="__('Cliente')" class="grid">
+                        <flux:navlist.item icon="ticket" :href="route('cliente.cartelera')" :current="request()->routeIs('cliente.cartelera*')" wire:navigate>
+                            {{ __('Cartelera') }}
+                        </flux:navlist.item>
+                        <flux:navlist.item icon="shopping-bag" :href="route('cliente.dulceria')" :current="request()->routeIs('cliente.dulceria*')" wire:navigate>
+                            {{ __('Dulcería') }}
+                        </flux:navlist.item>
+                    </flux:navlist.group>
+                @endif
             </flux:navlist>
 
             <flux:spacer />
